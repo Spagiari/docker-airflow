@@ -73,6 +73,26 @@ RUN set -ex \
         /usr/share/doc \
         /usr/share/doc-base
 
+# MS SQL DRIVER 17
+RUN apt-get update \
+	&& apt-get -y install gnupg2 \
+	&& curl https://packages.microsoft.com/keys/microsoft.asc > /usr/share/microsoft.asc \
+	&& apt-key add /usr/share/microsoft.asc \
+	&& curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+	&& apt-get update \
+	&& ACCEPT_EULA=Y apt-get -y install msodbcsql17 \
+	&& ACCEPT_EULA=Y apt-get -y install mssql-tools \
+	&& echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
+	&& echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc \
+	&& . ~/.bashrc \
+	&& apt-get -y install unixodbc-dev \
+	&& apt-get -y install libgssapi-krb5-2 \
+	&& pip install 'SQLAlchemy==1.3.15' \
+	&& pip install 'records==0.5.2' \
+	&& pip install pyodbc \
+	&& pip install pandas
+
+
 COPY script/entrypoint.sh /entrypoint.sh
 COPY config/airflow.cfg ${AIRFLOW_USER_HOME}/airflow.cfg
 
