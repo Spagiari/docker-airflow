@@ -61,6 +61,13 @@ RUN set -ex \
     && pip install pyasn1 \
     && pip install apache-airflow[crypto,celery,postgres,hive,jdbc,mysql,ssh${AIRFLOW_DEPS:+,}${AIRFLOW_DEPS}]==${AIRFLOW_VERSION} \
     && pip install 'redis==3.2' \
+    && pip3 install --upgrade google-cloud-storage \
+    && pip3 install --upgrade google-cloud \
+    && pip3 install --upgrade google-cloud-bigquery \
+    && pip3 install httplib2 --upgrade \
+    && pip3 install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib \
+    && pip3 install pandas-gbq -U \
+    && pip3 install gcsfs \
     && if [ -n "${PYTHON_DEPS}" ]; then pip install ${PYTHON_DEPS}; fi \
     && apt-get purge --auto-remove -yqq $buildDeps \
     && apt-get autoremove -yqq --purge \
